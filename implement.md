@@ -12,19 +12,29 @@
 
 ### Phase 1: Project setup and scaffolding
 
-- Initialize Go module and basic project structure
-- Create main entry and Cobra root command
-- Add Makefile with build/run targets
-- Wire global flags (e.g., --output)
-- Set version/build metadata placeholders
+- Initialize Go module and basic project structure (done)
+- Create main entry and Cobra root command (done)
+- Add Makefile with build/run targets (done)
+- Wire global flags (e.g., --output) (done)
+- Set version/build metadata placeholders (done)
+
+Implementation notes:
+
+- Global flag `--output/-o` is wired in the root command and stored in `outputFormat`.
+- Version/build placeholders live in `cmd/version.go` as `version`, `commit`, and `date` for future `-ldflags` injection.
 
 ### Phase 2: Registry client core logic
 
-- Implement registry client constructor
-- Implement ListTags for repository tag listing
-- Implement InspectImage for image metadata
-- Define ImageMetadata DTO
-- Ensure client returns errors directly without retries
+- Implement registry client constructor (done)
+- Implement ListTags for repository tag listing (done)
+- Implement InspectImage for image metadata (done)
+- Define ImageMetadata DTO (done)
+- Ensure client returns errors directly without retries (done)
+
+Implementation notes:
+- The registry client lives in `pkg/registry/client.go` with `NewClient`, `ListTags`, and `InspectImage`.
+- `ListTags` builds a full repository name using the configured registry and calls `remote.List`.
+- `InspectImage` uses `remote.Get`, returning digest/media type and a best-effort platform string.
 
 ### Phase 3: CLI commands and output formatting
 
