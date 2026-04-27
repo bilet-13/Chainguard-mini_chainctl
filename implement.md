@@ -32,17 +32,24 @@ Implementation notes:
 - Ensure client returns errors directly without retries (done)
 
 Implementation notes:
+
 - The registry client lives in `pkg/registry/client.go` with `NewClient`, `ListTags`, and `InspectImage`.
 - `ListTags` builds a full repository name using the configured registry and calls `remote.List`.
 - `InspectImage` uses `remote.Get`, returning digest/media type and a best-effort platform string.
 
 ### Phase 3: CLI commands and output formatting
 
-- Implement version command output
-- Implement images list command arg parsing
-- Implement images inspect command arg parsing
-- Add JSON output formatting option
-- Add table output with tabwriter
+- Implement version command output (done)
+- Implement images list command arg parsing (done)
+- Implement images inspect command arg parsing (done)
+- Add JSON output formatting option (done)
+- Add table output with tabwriter (done)
+
+Implementation notes:
+
+- `version` prints version, commit, and date via a Cobra command in `cmd/version.go`.
+- `images list` and `images inspect` live in `cmd/images.go` and honor the global `--output` flag.
+- JSON output uses a pretty encoder; table output uses `text/tabwriter` for alignment.
 
 ### Phase 4: Error handling and timeout behavior
 
