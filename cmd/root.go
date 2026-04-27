@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"sync"
 
 	"github.com/spf13/cobra"
 )
@@ -13,14 +14,27 @@ var rootCmd = &cobra.Command{
 	Short: "mychainctl is a minimal chainctl-style CLI",
 }
 
+var setupOnce sync.Once
+
+func setupRoot() {
+	setupOnce.Do(func() {
+		rootCmd.SilenceErrors = true
+		rootCmd.SilenceUsage = true
+
+		rootCmd.SetOut(os.Stdout)
+		rootCmd.SetErr(os.Stderr)
+
+		rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "table", "Output format: table or json")
+	})
+}
+
 func Execute() error {
-	rootCmd.SilenceErrors = true
-	rootCmd.SilenceUsage = true
+	setupRoot()
+	return rootCmd.Execute()
+}
 
-	rootCmd.SetOut(os.Stdout)
-	rootCmd.SetErr(os.Stderr)
-
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "table", "Output format: table or json")
-
+func ExecuteWithArgs(args []string) error {
+	setupRoot()
+	rootCmd.SetArgs(args)
 	return rootCmd.Execute()
 }
